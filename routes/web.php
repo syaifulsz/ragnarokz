@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('report', ['as' => 'forms/report', 'uses' => 'SiteController@formsReport']);
+
 // Auth routes
 include(base_path('routes/auth/auth.php'));
 

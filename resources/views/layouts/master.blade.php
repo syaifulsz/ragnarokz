@@ -12,7 +12,7 @@
     @include('nav')
     @include('breadcrumb')
     @yield('content')
-    <div class="container text-muted text-center xs-mt-20">
+    <div class="container text-muted text-center xs-mt-20 xs-pb-20">
         <hr>
         <small>Copyright &copy; 2016 SYAIFUL SHAH ZINAN &bull; RAGNAROKZ</small>
     </div>
