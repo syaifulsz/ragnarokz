@@ -1,0 +1,51 @@
+/*!*
+ * Roxflex
+ * A non-responsive grid with table property
+ * @author: Syaiful Shah Zinan <syaiful.shah@icarasia.com>
+ */
+
+.rowflex {
+    width: 100%;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+
+    &.rowflex--fit {
+        width: auto;
+    }
+
+    &.rowflex--fixed {
+        table-layout: fixed;
+
+        .rowflex__col {
+            width: auto;
+        }
+    }
+}
+
+.rowflex__col-make (@i) when (@i > 0) {
+
+    &.rowflex__col--@{i} {
+        width: ((@i/12) * 100%);
+    }
+    .rowflex__col-make (@i - 1);
+}
+
+.rowflex__col {
+    display: table-cell;
+    vertical-align: top;
+
+    &.rowflex__col--0 {
+        min-width: 0;
+    }
+
+    .rowflex__col-make(12);
+
+    &.rowflex__col--300px {
+        width: 300px;
+    }
+
+    &.rowflex__col--500px {
+        width: 500px;
+    }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "ssztheme_default",
+  "version": "1.0.0",
+  "description": "Syaiful Shah Zinan's Default Theme Framework",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://syaifusz_icardev@bitbucket.org/syaifusz_icardev/autospinn_v3.git"
+  },
+  "keywords": [
+    "syaiful shah zinan"
+  ],
+  "author": "Syaiful Shah Zinan",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/syaifusz_icardev/autospinn_v3#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-less": "^1.4.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "less": "^2.7.1"
+  }
+}

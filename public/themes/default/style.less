@@ -1,0 +1,287 @@
+/**
+ * Global Variables
+ */
+@assets_path: "assets";
+
+@framework_path: "assets/framework";
+@plugin_path: "assets/plugins";
+@bootstrap_path: "@{framework_path}/bootstrap";
+@less_space_path: "@{plugin_path}/less-space";
+
+/*!
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+// Core variables and mixins
+@import "@{bootstrap_path}/less/variables.less";
+
+@icon-font-path: "@{bootstrap_path}/fonts/"; // fix glyphicon path
+
+//== Container sizes
+@container-tablet:             (720px + @grid-gutter-width);
+@container-sm:                 @container-tablet;
+@container-desktop:            (970px + @grid-gutter-width);
+@container-md:                 @container-desktop;
+@container-large-desktop:      (970px + @grid-gutter-width);
+@container-lg:                 @container-large-desktop;
+
+@import "@{bootstrap_path}/less/mixins.less";
+
+// Reset and dependencies
+@import "@{bootstrap_path}/less/normalize.less";
+@import "@{bootstrap_path}/less/print.less";
+@import "@{bootstrap_path}/less/glyphicons.less";
+
+// Core CSS
+@import "@{bootstrap_path}/less/scaffolding.less";
+@import "@{bootstrap_path}/less/type.less";
+@import "@{bootstrap_path}/less/code.less";
+@import "@{bootstrap_path}/less/grid.less";
+@import "@{bootstrap_path}/less/tables.less";
+@import "@{bootstrap_path}/less/forms.less";
+@import "@{bootstrap_path}/less/buttons.less";
+
+// Components
+@import "@{bootstrap_path}/less/component-animations.less";
+@import "@{bootstrap_path}/less/dropdowns.less";
+@import "@{bootstrap_path}/less/button-groups.less";
+@import "@{bootstrap_path}/less/input-groups.less";
+@import "@{bootstrap_path}/less/navs.less";
+@import "@{bootstrap_path}/less/navbar.less";
+@import "@{bootstrap_path}/less/breadcrumbs.less";
+@import "@{bootstrap_path}/less/pagination.less";
+@import "@{bootstrap_path}/less/pager.less";
+@import "@{bootstrap_path}/less/labels.less";
+@import "@{bootstrap_path}/less/badges.less";
+@import "@{bootstrap_path}/less/jumbotron.less";
+@import "@{bootstrap_path}/less/thumbnails.less";
+@import "@{bootstrap_path}/less/alerts.less";
+@import "@{bootstrap_path}/less/progress-bars.less";
+@import "@{bootstrap_path}/less/media.less";
+@import "@{bootstrap_path}/less/list-group.less";
+@import "@{bootstrap_path}/less/panels.less";
+@import "@{bootstrap_path}/less/responsive-embed.less";
+@import "@{bootstrap_path}/less/wells.less";
+@import "@{bootstrap_path}/less/close.less";
+
+// Components w/ JavaScript
+@import "@{bootstrap_path}/less/modals.less";
+@import "@{bootstrap_path}/less/tooltip.less";
+@import "@{bootstrap_path}/less/popovers.less";
+@import "@{bootstrap_path}/less/carousel.less";
+
+// Utility classes
+@import "@{bootstrap_path}/less/utilities.less";
+@import "@{bootstrap_path}/less/responsive-utilities.less";
+
+/**
+ * Less Space
+ * Additional Mixin to extends Bootstrap utilities
+ * Documentation: https://github.com/Eomerx/less-space
+ */
+@import "@{less_space_path}/src/less-space.less";
+
+/**
+ * Bootstrap Patch
+ * Making the mobile navbar to change when reach tablet size
+ */
+@import "@{assets_path}/less/bootstrap-patch-navbar.less";
+
+.font-size--12          { font-size: 12px; }
+.font-size--14          { font-size: 14px; }
+.line-height--normal    { line-height: normal; }
+.line-height--20        { line-height: 20px; }
+.display--block         { display: block; }
+
+.rz-page-group {
+    margin: 0;
+    padding: 0;
+}
+
+.rz-page-group__item {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    img {
+        max-width: 100%;
+    }
+}
+
+.rz-jumbotron {
+    background: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.rz-jumbotron__cover {
+    top: 0;
+    left: 0;
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-color: #000;
+    transform: scale(1.2);
+    opacity: 0.15;
+    background-color: #eeeeee;
+
+    ._filter(~"blur(5px) grayscale(1)");
+}
+
+.rz-progress {
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 3px;
+}
+
+.rz-progress__indicator
+{
+    z-index: 100;
+    font-size: 11px;
+    // font-weight: bold;
+    color: #999;
+    // opacity: 0.25;
+    position: fixed;
+    top: 10px;
+    left: 15px;
+    height: auto;
+    text-transform: uppercase;
+
+    &.rz-progress__indicator--finish {
+        color: @brand-danger;
+        // opacity: 1;
+    }
+}
+
+.rz-progress__indicator__thumb {
+    // opacity: 1;
+    vertical-align: text-top;
+    margin-top: -4px;
+    margin-right: 3px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background-size: cover;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.rz-manage {
+
+}
+
+.rz-manage__save-button {
+    display: inline-block;
+    color: @brand-danger;
+    vertical-align: middle;
+    z-index: 100;
+    font-size: 11px;
+    line-height: 15px;
+    font-weight: bold;
+    color: @link-color;
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    text-transform: uppercase;
+
+    &:hover, &:focus {
+        text-decoration: none;
+    }
+
+    &.rz-manage__save-button--active {
+        color: @brand-success;
+    }
+}
+
+.rz-pager {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    position: fixed;
+
+    .pager {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .pager .previous > a, .pager .previous > span,
+    .pager .next > a, .pager .next > span {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        line-height: 40px;
+        padding-left: 0;
+        padding-right: 0;
+        color: #666;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+    }
+
+    .pager .next > a.rz-pager__btn {
+
+        &.rz-pager__btn--active {
+            border: #cc0000;
+            background-color: #cc0000;
+            color: #FFF;
+        }
+    }
+
+    .popover-title {
+        background-color: #FFF;
+
+        .label {
+            display: inline-block;
+            text-transform: uppercase;
+            padding-top: 3px;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            display: block;
+        }
+    }
+}
+
+.rz-pager__thumb {
+    ._grayscale();
+    // width: 100%;
+    // width: 100px;
+    // height: 100px;
+}
+
+._grayscale(@filter: ~"grayscale(1)") {
+    -webkit-filter: @filter;
+    -moz-filter: @filter;
+    -o-filter: @filter;
+    -ms-filter: @filter;
+    filter: @filter;
+}
+
+._blur(@blur: 5px) {
+    -webkit-filter: blur(@blur);
+    -moz-filter: blur(@blur);
+    -o-filter: blur(@blur);
+    -ms-filter: blur(@blur);
+    filter: blur(@blur);
+}
+
+._filter(@filter) {
+    -webkit-filter: @filter;
+    -moz-filter: @filter;
+    -o-filter: @filter;
+    -ms-filter: @filter;
+    filter: @filter;
+}

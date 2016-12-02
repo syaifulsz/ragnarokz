@@ -1,0 +1,121 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: RagnarokZ 3 API
+  description: An awesome API to view and manage manga, chapter and pages
+    
+schemes:
+  - http
+host: local.ragnarokzii.ssz.io
+basePath: /api/manga/mangafox/
+paths:
+  /:
+    get:
+      responses:
+        200:
+          description: returns json data for all available mangas
+      parameters:
+        - name: page
+          in: formData
+          description: page number
+          type: integer
+          
+  /{manga_slug}:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+    get:
+      responses:
+        200:
+          description: returns json data for all chapters of a specific manga
+          
+  /{manga_slug}/delete-manga:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+    post:
+      responses:
+        200:
+          description: delete manga and all chapter and page that belongs to it
+          
+  /{manga_slug}/{chapter_slug}:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+      - name: chapter_slug
+        in: path
+        description: chapter's slug
+        type: string
+        required: true
+    get:
+      responses:
+        200:
+          description: returns json data for pages that belongs to a chapter and manga
+
+  /add:
+    parameters:
+      - name: manga_url
+        in: query
+        description: manga's url
+        type: string
+        required: true
+    post:
+      responses:
+        200:
+          description: scrap, delete and update page for specific chapter and manga
+
+  /{manga_slug}/update:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+    post:
+      responses:
+        200:
+          description: scrap and update latest chapters for specific manga
+          
+  /{manga_slug}/{chapter_slug}/update:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+      - name: chapter_slug
+        in: path
+        description: chapter's slug
+        type: string
+        required: true
+    post:
+      responses:
+        200:
+          description: scrap, delete and update page for specific chapter and manga
+          
+  /{manga_slug}/{chapter_slug}/save:
+    parameters:
+      - name: manga_slug
+        in: path
+        description: manga's slug
+        type: string
+        required: true
+      - name: chapter_slug
+        in: path
+        description: chapter's slug
+        type: string
+        required: true
+    post:
+      responses:
+        200:
+          description: scrap, delete and update page for specific chapter and manga
