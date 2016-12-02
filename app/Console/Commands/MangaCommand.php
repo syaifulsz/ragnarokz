@@ -76,7 +76,7 @@ class MangaCommand extends Command
         }
 
         return [
-            'manga' => $mangaM->find($manga_id) ? $mangaM->find($manga_id)->first() : null,
+            'manga' => $mangaM->where('manga_id', $manga_id) ? $mangaM->where('manga_id', $manga_id)->first() : null,
             'option_id' => $option_id,
             'option_range' => $optionRange
         ];
