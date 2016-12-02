@@ -12,6 +12,10 @@
     @include('nav')
     @include('breadcrumb')
     @yield('content')
+    <div class="container text-muted text-center xs-mt-20">
+        <hr>
+        <small>Copyright &copy; 2016 SYAIFUL SHAH ZINAN &bull; RAGNAROKZ</small>
+    </div>
     <script src="{{ asset('themes/default/assets/framework/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('themes/default/assets/framework/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     @stack('scripts')
