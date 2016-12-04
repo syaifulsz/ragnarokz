@@ -33,7 +33,7 @@ All manga managing is done via console. (API documentation coming soon)
 
 ```python
 # manga:add <manga_url>
-manga:add http://mangafox.me/manga/onepunch_man/
+php artisan manga:add http://mangafox.me/manga/onepunch_man/
 ```
 
 ### Scrap Manga
@@ -41,7 +41,7 @@ manga:add http://mangafox.me/manga/onepunch_man/
 Just run this command, and you will be prompt to choose manga that already added.
 
 ```python
-manga:scrap
+php artisan manga:scrap
 
 +----+--------------------------------------+
 | ID | Manga                                |
@@ -61,4 +61,5 @@ manga:scrap
 
 Please create an issue and insert what feature you want or interested in the future!
 
+* Inf8 Mode - Automatically switch to next chapter when reach the bottom of the page (Beta Testing)
 * Manage manga via web (GUIFTW!)

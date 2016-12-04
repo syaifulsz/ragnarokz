@@ -1,6 +1,6 @@
 @if ($breadcrumb)
     <div class="container">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb js-breadcrumb">
             @foreach ($breadcrumb as $title => $url)
                 <li><a href="{{ $url }}">{{ $title }}</a></li>
             @endforeach

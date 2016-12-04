@@ -213,4 +213,59 @@ class ReaderController extends Controller
         View::share($data);
         return view('manga.page');
     }
+
+    public function showMangaPageInfinite($manga_slug, $chapter_slug)
+    {
+        $data = [
+            'manga' => [],
+            'chapter' => [],
+            'pages' => []
+        ];
+
+        // set chapters
+        $query = new \App\MangaChapter();
+        $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
+
+        if (!$chapter) abort(404, 'Page not found.');
+
+        $data['chapter'] = $chapter ? $chapter : [];
+        $data['pages'] = $chapter ? $chapter->pages : [];
+
+        // init manga
+        $manga = new \App\Manga();
+        $manga = $manga->slug($manga_slug)->first();
+
+        // set breadcrumb
+        $this->breadcrumb[$chapter->manga->manga_title] = $chapter->manga->_url();
+        $this->breadcrumb[$chapter->_title()] = $chapter->_url();
+        $data['breadcrumb'] = $this->breadcrumb;
+
+        // set manga
+        $data['manga'] = $manga;
+
+        // query chapter for pagination
+        $navQuery = $manga->chapters
+            ->where('manga_chapter_order', '>=', ((int)$chapter->manga_chapter_order - 1))
+            ->where('manga_chapter_order', '<=', ((int)$chapter->manga_chapter_order + 1))
+            ->sortBy('manga_chapter_order');
+
+        // create pagination
+        $pagination = [];
+        $navs = [];
+        foreach ($navQuery as $nav) {
+            $navs[] = $nav;
+        }
+
+        foreach ($navs as $nav_key => $nav) {
+            if ($nav->manga_chapter_order == $chapter->manga_chapter_order) $current_nav_key = $nav_key;
+        }
+
+        // set pagination
+        $pagination['next'] = isset($navs[$current_nav_key + 1]) ? $navs[$current_nav_key + 1] : null;
+        $pagination['prev'] = $current_nav_key - 1 >= 0 ? $navs[$current_nav_key - 1] : null;
+        $data['pagination'] = $pagination;
+
+        View::share($data);
+        return view('manga.page_infinite');
+    }
 }

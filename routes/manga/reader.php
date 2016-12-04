@@ -9,4 +9,6 @@ Route::get('/ragnarokz-content/manga/{manga_slug}/{manga_chapter_slug}/cover/cov
 // manga url
 Route::get('/', ['as' => 'home', 'uses' => 'ReaderController@index']);
 Route::get('/{manga_slug}', ['as' => 'manga/chapter', 'uses' => 'ReaderController@showMangaChapters']);
+Route::get('/{manga_slug}/{chapter}/infinite', ['as' => 'manga/chapter/page-infinite', 'uses' => 'ReaderController@showMangaPageInfinite']);
 Route::get('/{manga_slug}/{chapter}', ['as' => 'manga/chapter/page', 'uses' => 'ReaderController@showMangaPage']);
+

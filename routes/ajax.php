@@ -11,3 +11,5 @@
 */
 
 Route::post('chapter-teaser', ['uses' => 'AjaxController@chapterTeaser']);
+Route::post('get-page', ['uses' => 'AjaxController@getPage']);
+Route::post('set-recent', ['uses' => 'AjaxController@setRecent']);
