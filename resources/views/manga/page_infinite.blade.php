@@ -1,3 +1,7 @@
+{{--
+TODO: Last chapter handler on view's JS
+TODO: Chapter with no pages handler on view's JS
+--}}
 @extends('layouts.master')
 
 @section('content')

@@ -228,6 +228,17 @@ class ReaderController extends Controller
         return view('manga.page');
     }
 
+    /**
+     * showMangaPageInfinite()
+     *
+     * TODO: Page Inifnite Docs
+     * TODO: Last chapter handler on Controllers and Views
+     * TODO: Chapter with no pages handler on Controllers and Views
+     *
+     * @param       {String}        $manga_slug       manga's slug
+     * @param       {String}        $chapter_slug     manga chapter's slug
+     * @param       View::make()
+     */
     public function showMangaPageInfinite($manga_slug, $chapter_slug)
     {
         $data = [

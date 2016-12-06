@@ -7,6 +7,9 @@ use Illuminate\Console\Command;
 // Service
 use \App\Providers\MangaServiceProvider;
 
+// Mangas
+use \App\Manga\Manga;
+
 /**
  * TODO: MangaCommand Clean Up
  * TODO: Create an option and function to scrap chapters that has no pages
@@ -42,8 +45,8 @@ class MangaCommand extends Command
             'start' => null,
             'end' => null,
         ];
-        $mangaM = new \App\Manga\Manga();
-        $mangas = $mangaM->all();
+
+        $mangas = Manga::all();
 
         if (!$mangas->count()) abort(404, 'No manga found.');
 
@@ -70,6 +73,7 @@ class MangaCommand extends Command
         // $option_id = $this->ask('Choose your scrapping method? ['. $options .']');
         // if (!is_numeric($option_id) || !array_key_exists($option_id, $this->options)) abort(400, 'Invalid option ID.');
 
+        // FIXME: Wrong manga by ID selection
         $option_id = 1;
         if ($option_id == 1) {
             $optionRange['start'] = $this->ask('Please add your "start" range? [0 - '. $manga->chapters->count() .']');
