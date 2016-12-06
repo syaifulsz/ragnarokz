@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Manga;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Components\MangaHelper;
 use \stojg\crop\CropEntropy;
 
-class MangaChapter extends Model
+class Chapter extends Model
 {
     protected $primaryKey = 'manga_chapter_id';
     protected $table = 'manga_chapters';
@@ -22,27 +22,22 @@ class MangaChapter extends Model
 
     public function recents()
     {
-        return $this->hasMany('App\MangaChapterRecent', 'manga_chapter_id', 'manga_chapter_id');
-    }
-
-    public function photos()
-    {
-        return $this->hasMany('App\MangaPhoto', 'manga_chapter_id', 'manga_chapter_id');
+        return $this->hasMany('App\Manga\ChapterRecent', 'manga_chapter_id', 'manga_chapter_id');
     }
 
     public function source()
     {
-        return $this->hasOne('App\Source', 'source_id', 'source_id');
+        return $this->hasOne('App\Manga\Source', 'source_id', 'source_id');
     }
 
     public function manga()
     {
-        return $this->hasOne('App\Manga', 'manga_id', 'manga_id');
+        return $this->hasOne('App\Manga\Manga', 'manga_id', 'manga_id');
     }
 
     public function pages()
     {
-        return $this->hasMany('App\MangaPage', 'manga_chapter_id', 'manga_chapter_id');
+        return $this->hasMany('App\Manga\Page', 'manga_chapter_id', 'manga_chapter_id');
     }
 
     public function scopeSlug($query, $slug)
@@ -203,7 +198,7 @@ class MangaChapter extends Model
     {
         $chapter_ids = null;
         $page_ids = null;
-        $manga = \App\Manga::slug($slug)->first();
+        $manga = \App\Manga\Manga::slug($slug)->first();
 
         if ($manga) {
             $chapter_ids = self::where('manga_id', $manga->manga_id);

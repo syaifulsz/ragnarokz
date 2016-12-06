@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Manga;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MangaPage extends Model
+class Page extends Model
 {
     protected $primaryKey = 'manga_page_id';
     protected $table = 'manga_pages';
@@ -19,24 +19,19 @@ class MangaPage extends Model
         'source_id'
     ];
 
-    public function photos()
-    {
-        return $this->hasOne('App\MangaPhoto', 'manga_page_id', 'manga_page_id');
-    }
-
     public function source()
     {
-        return $this->hasOne('App\Source', 'source_id', 'source_id');
+        return $this->hasOne('App\Manga\Source', 'source_id', 'source_id');
     }
 
     public function manga()
     {
-        return $this->hasOne('App\Manga', 'manga_id', 'manga_id');
+        return $this->hasOne('App\Manga\Manga', 'manga_id', 'manga_id');
     }
 
     public function chapter()
     {
-        return $this->hasOne('App\MangaChapter', 'manga_chapter_id', 'manga_chapter_id');
+        return $this->hasOne('App\Manga\Chapter', 'manga_chapter_id', 'manga_chapter_id');
     }
 
     public function scopeSlug($query, $slug)

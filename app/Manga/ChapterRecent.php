@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Manga;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Components\MangaHelper;
 
-class MangaChapterRecent extends Model
+class ChapterRecent extends Model
 {
     protected $primaryKey = 'manga_chapter_recent_id';
     protected $table = 'manga_chapter_recents';
@@ -16,12 +16,12 @@ class MangaChapterRecent extends Model
 
     public function chapter()
     {
-        return $this->hasOne('App\MangaChapter', 'manga_chapter_id', 'manga_chapter_id');
+        return $this->hasOne('App\Manga\Chapter', 'manga_chapter_id', 'manga_chapter_id');
     }
 
     public function manga()
     {
-        return $this->hasOne('App\Manga', 'manga_id', 'manga_id');
+        return $this->hasOne('App\Manga\Manga', 'manga_id', 'manga_id');
     }
 
     public function _recent()

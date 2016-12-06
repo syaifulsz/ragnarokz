@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Manga;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Source extends Model
 
     public function manga()
     {
-        return $this->hasMany('App\Manga', 'source_id', 'source_id');
+        return $this->hasMany('App\Manga\Manga', 'source_id', 'source_id');
     }
 
     public function scopeSlug($query, $slug)

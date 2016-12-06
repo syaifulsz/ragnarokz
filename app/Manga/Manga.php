@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Manga;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,24 +18,19 @@ class Manga extends Model
 
     public $mangaSource = 'mangafox';
 
-    public function photos()
-    {
-        return $this->hasMany('App\MangaPhoto', 'manga_id', 'manga_id');
-    }
-
     public function source()
     {
-        return $this->hasOne('App\Source', 'source_id', 'source_id');
+        return $this->hasOne('App\Manga\Source', 'source_id', 'source_id');
     }
 
     public function chapters()
     {
-        return $this->hasMany('App\MangaChapter', 'manga_id', 'manga_id');
+        return $this->hasMany('App\Manga\Chapter', 'manga_id', 'manga_id');
     }
 
     public function recents()
     {
-        return $this->hasMany('App\MangaChapterRecent', 'manga_id', 'manga_id');
+        return $this->hasMany('App\Manga\ChapterRecent', 'manga_id', 'manga_id');
     }
 
     public function scopeSlug($query, $slug)
@@ -85,7 +80,7 @@ class Manga extends Model
         $error = null;
 
         // save manga source
-        $sourceM = new \App\Source();
+        $sourceM = new \App\Manga\Source();
         $source = $sourceM->_save($this->mangaSource);
 
         if (!isset($source->source_id) || !$source->source_id) abort(400, __METHOD__ . ' source_id not exist or empty.');
@@ -135,7 +130,7 @@ class Manga extends Model
     {
         $rmdir = false;
         $delete = false;
-        $chapterM = new \App\MangaChapter();
+        $chapterM = new \App\Manga\Chapter();
         $relations = $chapterM->_deleteManga($slug);
         $manga = self::slug($slug)->first();
         if ($manga) {

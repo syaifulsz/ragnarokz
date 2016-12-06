@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+// Facades
 use Validator;
-use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\User;
 use Illuminate\Support\Facades\View;
+
+// Models
+use App\User;
 
 class AuthController extends Controller
 {
@@ -63,7 +66,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         if (!config('auth.enableRegister')) abort(404, 'Page not found.');
-        
+
         $data = [
             'request' => $request
         ];

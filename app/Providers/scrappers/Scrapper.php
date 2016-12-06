@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Readers;
+namespace App\Providers\Scrappers;
 
 // Facedes
 use Illuminate\Support\Facades\Input;
@@ -12,9 +12,9 @@ use DiDom\Document;
 use MangaHelper;
 
 // Models
-use App\Manga;
-use App\MangaChapter;
-use App\MangaPage;
+use App\Manga\Manga;
+use App\Manga\Chapter;
+use App\Manga\Page;
 
 class Scrapper implements ScrapperInterface
 {
@@ -111,13 +111,13 @@ class Scrapper implements ScrapperInterface
      */
     public function updateMangaPage($manga_slug, $chapter_slug)
     {
-        $chapter = MangaChapter::slugSource("{$this->mangaSource}-{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slugSource("{$this->mangaSource}-{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Chapter not found.');
 
         // query and delete all relatad page with this chapter first
-        $ids = MangaPage::where('manga_chapter_id', $chapter['manga_chapter_id'])->pluck('manga_page_id')->toArray();
-        MangaPage::destroy($ids);
+        $ids = Page::where('manga_chapter_id', $chapter['manga_chapter_id'])->pluck('manga_page_id')->toArray();
+        Page::destroy($ids);
 
         if (!isset($chapter->manga_chapter_url) || !$chapter->manga_chapter_url) abort(400, "Chapter manga_chapter_url is not exist or empty.");
 
@@ -184,7 +184,7 @@ class Scrapper implements ScrapperInterface
     public function saveMangaPageImages($manga_slug, $chapter_slug)
     {
         $images = [];
-        $chapter = MangaChapter::slug("{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Chapter not found.');
 

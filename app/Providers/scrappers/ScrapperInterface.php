@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Readers;
+namespace App\Providers\Scrappers;
 
 interface ScrapperInterface
 {

@@ -10,6 +10,21 @@ use Illuminate\Support\Facades\Input;
 // Vendors
 use Carbon\Carbon;
 
+// Mangas
+use \App\Manga\Manga;
+use \App\Manga\Chapter;
+use \App\Manga\Page;
+use \App\Manga\ChapterRecent;
+
+/**
+ * TODO: Manager Performance Tweak - Figureout a way to start a single object
+ *       instance for example from a specific model like \App\Manga\Manga()
+ *       and then save chapter and pages from this object instead of initiate
+ *       a new object for each chapters and pages.
+ *
+ *       Docs: https://laravel.com/docs/5.3/eloquent-relationships#the-save-method
+ */
+
 class ReaderController extends Controller
 {
     /**
@@ -22,7 +37,7 @@ class ReaderController extends Controller
             'pageTitle' => 'Manga Index',
             'mangas' => []
         ];
-        $data['mangas'] = \App\Manga::all();
+        $data['mangas'] = Manga::all();
 
         View::share($data);
         return view('manga.index');
@@ -45,8 +60,7 @@ class ReaderController extends Controller
         ];
 
         // set manga
-        $query = new \App\Manga();
-        $manga = $query->slug($manga_slug)->first();
+        $manga = Manga::slug($manga_slug)->first();
 
         if (!$manga) abort(404, 'Page not found.');
 
@@ -106,24 +120,24 @@ class ReaderController extends Controller
         ];
 
         // set chapters
-        $query = new \App\MangaChapter();
-        $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Page not found.');
 
         $data['chapter'] = $chapter ? $chapter : [];
-        $data['manga'] = $chapter ? $chapter->manga : [];
+
         $data['pages'] = $chapter ? $chapter->pages : [];
 
         // init manga
-        $manga = new \App\Manga();
-        $manga = $manga->slug($manga_slug)->first();
+        $manga = $chapter ? $chapter->manga : [];
+        // $manga = new \App\Manga\Manga();
+        // $manga = $manga->slug($manga_slug)->first();
 
         // set manga
         $data['manga'] = $manga;
 
         // set recent read chapters
-        $recent = new \App\MangaChapterRecent();
+        $recent = new ChapterRecent();
         $latestRecent = $recent
             ->where('manga_id', $manga->manga_id)
             ->where('created_at', '>', Carbon::now()->subHour(1))
@@ -223,8 +237,7 @@ class ReaderController extends Controller
         ];
 
         // set chapters
-        $query = new \App\MangaChapter();
-        $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Page not found.');
 
@@ -232,8 +245,9 @@ class ReaderController extends Controller
         $data['pages'] = $chapter ? $chapter->pages : [];
 
         // init manga
-        $manga = new \App\Manga();
-        $manga = $manga->slug($manga_slug)->first();
+        $manga = $chapter ? $chapter->manga : [];
+        // $manga = new \App\Manga\Manga();
+        // $manga = $manga->slug($manga_slug)->first();
 
         // set breadcrumb
         $this->breadcrumb[$chapter->manga->manga_title] = $chapter->manga->_url();

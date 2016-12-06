@@ -11,14 +11,23 @@ use GuzzleHttp\Psr7;
 use Illuminate\Support\Facades\Cache;
 
 // Models
-use App\Manga;
-use App\MangaChapter;
-use App\MangaPage;
+use App\Manga\Manga;
+use App\Manga\Chapter;
+use App\Manga\Page;
 use App\MangaPhoto;
-use App\Source;
+use App\Manga\Source;
 
 // Components
 use MangaHelper;
+
+/**
+ * TODO: Manager Performance Tweak - Figureout a way to start a single object
+ *       instance for example from a specific model like \App\Manga\Manga()
+ *       and then save chapter and pages from this object instead of initiate
+ *       a new object for each chapters and pages.
+ *
+ *       Docs: https://laravel.com/docs/5.3/eloquent-relationships#the-save-method
+ */
 
 class MangaManager implements MangaManagerInterface
 {
@@ -124,8 +133,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveManga($data)
     {
-        $model = new Manga();
-        return $model->_save($data);
+        return Manga::_save($data);
     }
 
     /**
@@ -135,8 +143,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaChapter($data)
     {
-        $model = new MangaChapter();
-        return $model->_save($data);
+        return Chapter::_save($data);
     }
 
     /**
@@ -146,8 +153,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaPage($data)
     {
-        $model = new MangaPage();
-        return $model->_save($data);
+        return Page::_save($data);
     }
 
     /**
@@ -157,8 +163,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveSource($slug)
     {
-        $model = new Source();
-        return $model->_save($slug);
+        return Source::_save($slug);
     }
 
     /**
@@ -168,7 +173,6 @@ class MangaManager implements MangaManagerInterface
      */
     public function deleteManga($slug)
     {
-        $model = new Manga();
-        return $model->_deleteManga($slug);
+        return Manga::_deleteManga($slug);
     }
 }

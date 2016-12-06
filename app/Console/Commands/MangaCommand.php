@@ -7,6 +7,10 @@ use Illuminate\Console\Command;
 // Service
 use \App\Providers\MangaServiceProvider;
 
+/**
+ * TODO: MangaCommand Clean Up
+ * TODO: Create an option and function to scrap chapters that has no pages
+ */
 class MangaCommand extends Command
 {
     protected $signature = 'manga:scrap';
@@ -38,7 +42,7 @@ class MangaCommand extends Command
             'start' => null,
             'end' => null,
         ];
-        $mangaM = new \App\Manga();
+        $mangaM = new \App\Manga\Manga();
         $mangas = $mangaM->all();
 
         if (!$mangas->count()) abort(404, 'No manga found.');
@@ -102,7 +106,7 @@ class MangaCommand extends Command
 
         if ($from || $to) $this->line("Working on chapter from {$from} to {$to}...");
 
-        $chapters = \App\MangaChapter::where('manga_id', $manga->manga_id)
+        $chapters = \App\Manga\Chapter::where('manga_id', $manga->manga_id)
             ->where('manga_chapter_order', '>=', $from)
             ->where('manga_chapter_order', '<=', $to)
             ->get();

@@ -8,7 +8,7 @@ class MangaServiceProvider extends ServiceProvider
 {
     public function __construct()
     {
-        $this->reader = new \App\Providers\Readers\Scrapper();
+        $this->scrapper = new \App\Providers\Scrappers\Scrapper();
         $this->manager = new \App\Providers\Managers\MangaManager();
     }
 
@@ -18,7 +18,7 @@ class MangaServiceProvider extends ServiceProvider
      * @inheritDoc
      */
     public function addManga($url) {
-        return $this->reader->addManga($url);
+        return $this->scrapper->addManga($url);
     }
 
     /**
@@ -28,7 +28,7 @@ class MangaServiceProvider extends ServiceProvider
      */
     public function updateMangaChapter($slug)
     {
-        return $this->reader->updateMangaChapter($slug);
+        return $this->scrapper->updateMangaChapter($slug);
     }
 
     /**
@@ -38,7 +38,7 @@ class MangaServiceProvider extends ServiceProvider
      */
     public function saveMangaPageImages($manga_slug, $chapter_slug)
     {
-        return $this->reader->saveMangaPageImages($manga_slug, $chapter_slug);
+        return $this->scrapper->saveMangaPageImages($manga_slug, $chapter_slug);
     }
 
     /**
@@ -48,7 +48,7 @@ class MangaServiceProvider extends ServiceProvider
      */
     public function updateMangaPage($manga_slug, $chapter_slug)
     {
-        return $this->reader->updateMangaPage($manga_slug, $chapter_slug);
+        return $this->scrapper->updateMangaPage($manga_slug, $chapter_slug);
     }
 
     /**

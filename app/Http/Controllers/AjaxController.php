@@ -25,7 +25,7 @@ class AjaxController extends Controller
         if (!$manga_slug || !$chapter_slug) return response([], 405);
 
         $pages = [];
-        $query = new \App\MangaChapter();
+        $query = new \App\Manga\Chapter();
         $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
 
         $pagesQuery = $chapter
@@ -49,13 +49,13 @@ class AjaxController extends Controller
         if (!$manga_slug || !$chapter_slug) return response([], 405);
 
         $pages = [];
-        $query = new \App\MangaChapter();
+        $query = new \App\Manga\Chapter();
         $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
 
         $pages = $chapter->pages;
 
         // init manga
-        $manga = new \App\Manga();
+        $manga = new \App\Manga\Manga();
         $manga = $manga->slug($manga_slug)->first();
 
         // set manga
@@ -99,7 +99,7 @@ class AjaxController extends Controller
         $manga_slug = $request->has('manga_slug') ? $request->get('manga_slug') : null;
         $chapter_slug = $request->has('chapter_slug') ? $request->get('chapter_slug') : null;
 
-        $query = new \App\MangaChapter();
+        $query = new \App\Manga\Chapter();
         $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$manga_slug || !$chapter_slug) return response([], 405);
@@ -107,7 +107,7 @@ class AjaxController extends Controller
         $manga = $chapter->manga;
 
         // set recent read chapters
-        $recent = new \App\MangaChapterRecent();
+        $recent = new \App\Manga\ChapterRecent();
         $latestRecent = $recent
             ->where('manga_id', $manga->manga_id)
             ->where('created_at', '>', Carbon::now()->subHour(1))
