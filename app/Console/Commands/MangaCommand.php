@@ -73,18 +73,22 @@ class MangaCommand extends Command
         // $option_id = $this->ask('Choose your scrapping method? ['. $options .']');
         // if (!is_numeric($option_id) || !array_key_exists($option_id, $this->options)) abort(400, 'Invalid option ID.');
 
-        // FIXME: Wrong manga by ID selection
+        $manga = $mangas->find($manga_id) ? $mangas->find($manga_id) : [];
+
+        $firstChapterOrder = $manga->chapters()->orderBy('manga_chapter_order')->first()->_order();
+        $lastChapterOrder = $manga->chapters()->orderBy('manga_chapter_order', 'desc')->first()->_order();
+
         $option_id = 1;
         if ($option_id == 1) {
-            $optionRange['start'] = $this->ask('Please add your "start" range? [0 - '. $manga->chapters->count() .']');
-            if (!is_numeric($optionRange['start']) || ($optionRange['start'] > $manga->chapters->count())) abort(400, 'Invalid range start!.');
+            $optionRange['start'] = $this->ask('Please add your "start" range? ['. $firstChapterOrder .' - '. $lastChapterOrder .']');
+            if (!is_numeric($optionRange['start']) || ($optionRange['start'] > $lastChapterOrder)) abort(400, 'Invalid range start!.');
 
-            $optionRange['end'] = $this->ask('Please add your "end" range? ['. $optionRange['start'] .' - '. $manga->chapters->count() .']');
-            if (!is_numeric($optionRange['end']) || ($optionRange['end'] >= $optionRange['start'] && $optionRange['end'] > $manga->chapters->count())) abort(400, 'Invalid range end!.');
+            $optionRange['end'] = $this->ask('Please add your "end" range? ['. $optionRange['start'] .' - '. $lastChapterOrder .']');
+            if (!is_numeric($optionRange['end']) || ($optionRange['end'] >= $optionRange['start'] && $optionRange['end'] > $lastChapterOrder)) abort(400, 'Invalid range end!.');
         }
 
         return [
-            'manga' => $mangaM->where('manga_id', $manga_id) ? $mangaM->where('manga_id', $manga_id)->first() : null,
+            'manga' => $manga,
             'option_id' => $option_id,
             'option_range' => $optionRange
         ];

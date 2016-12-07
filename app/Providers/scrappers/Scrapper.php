@@ -115,9 +115,12 @@ class Scrapper implements ScrapperInterface
 
         if (!$chapter) abort(404, 'Chapter not found.');
 
+        $manga = $chapter->manga;
+
         // query and delete all relatad page with this chapter first
         $ids = Page::where('manga_chapter_id', $chapter['manga_chapter_id'])->pluck('manga_page_id')->toArray();
         Page::destroy($ids);
+        \App\Components\MangaHelper::deleteDir(public_path("ragnarokz-content/manga/{$manga->_slug()}/{$chapter->_slug()}"));
 
         if (!isset($chapter->manga_chapter_url) || !$chapter->manga_chapter_url) abort(400, "Chapter manga_chapter_url is not exist or empty.");
 
@@ -126,8 +129,6 @@ class Scrapper implements ScrapperInterface
 
         // kill process if source return false
         if (!$source['status']) abort(400, $source['error']);
-
-        $manga = $chapter->manga;
 
         $doc = new Document($source['content']);
 
@@ -159,9 +160,8 @@ class Scrapper implements ScrapperInterface
                 $data['manga_page_img_src'] = $pageParse->has('img#image') ? $pageParse->find('img#image')[0]->getAttribute('src') : null;
             }
 
-            $page = $this->manager->saveMangaPage($data);
-
-            $pages[] = $page;
+            $page = new \App\Manga\Page($data);
+            $pages[] = $chapter->pages()->save($page);
         }
 
         return [
@@ -190,6 +190,12 @@ class Scrapper implements ScrapperInterface
 
         foreach ($chapter->pages->toArray() as $page) {
 
+            // to exclude any token on url so that we generate local image with
+            // proper namings
+            $src = $page['manga_page_img_src'];
+            $src = parse_url($src);
+            $src = $src['scheme'] . '//' . $src['scheme'] . $src['path'];
+
             $img = $this->manager->getSource($page['manga_page_img_src']);
 
             if (!$img['status'] || !$img['content']) abort(400, __METHOD__ . ' fail to fetch image.');
@@ -198,7 +204,7 @@ class Scrapper implements ScrapperInterface
                 'manga_slug' => $chapter->manga->manga_slug,
                 'manga_chapter_slug' => $chapter->manga_chapter_slug,
                 'manga_page_slug' => $page['manga_page_slug'],
-                'manga_page_img_src' => $page['manga_page_img_src'],
+                'manga_page_img_src' => $src,
                 'content' => $img['content']
             ]);
 
