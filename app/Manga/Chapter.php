@@ -68,6 +68,40 @@ class Chapter extends Model
         ]);
     }
 
+    public function _inf8()
+    {
+        return route('manga/chapter/page-infinite', [
+            'manga_slug' => $this->manga->_slug(),
+            'chapter' => $this->_slugOrder()
+        ]);
+    }
+
+    public function _isChapterUrl()
+    {
+        $route = route('manga/chapter/page', [
+            'manga_slug' => $this->manga->_slug(),
+            'chapter' => $this->_slugOrder()
+        ]);
+
+        $route = \App\Components\MangaHelper::uriGetPath($route);
+        $route = ltrim($route, '/');
+
+        return $route;
+    }
+
+    public function _isInf8()
+    {
+        $route = route('manga/chapter/page-infinite', [
+            'manga_slug' => $this->manga->_slug(),
+            'chapter' => $this->_slugOrder()
+        ]);
+
+        $route = \App\Components\MangaHelper::uriGetPath($route);
+        $route = ltrim($route, '/');
+
+        return $route;
+    }
+
     public function _order()
     {
         return $this->manga_chapter_order;

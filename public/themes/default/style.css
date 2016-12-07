@@ -9455,3 +9455,31 @@ button.close {
   -ms-filter: grayscale(1);
   filter: grayscale(1);
 }
+.inf8-nav {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+.inf8-btn {
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #FFF;
+  font-weight: bold;
+}
+.inf8-btn:hover,
+.inf8-btn:focus {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  color: #000;
+}
+.inf8-btn.inf8-btn--active {
+  background-color: #d9534f;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  color: #FFF;
+}

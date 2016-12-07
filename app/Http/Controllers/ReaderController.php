@@ -16,15 +16,6 @@ use \App\Manga\Chapter;
 use \App\Manga\Page;
 use \App\Manga\ChapterRecent;
 
-/**
- * TODO: Manager Performance Tweak - Figureout a way to start a single object
- *       instance for example from a specific model like \App\Manga\Manga()
- *       and then save chapter and pages from this object instead of initiate
- *       a new object for each chapters and pages.
- *
- *       Docs: https://laravel.com/docs/5.3/eloquent-relationships#the-save-method
- */
-
 class ReaderController extends Controller
 {
     /**
@@ -229,11 +220,7 @@ class ReaderController extends Controller
     }
 
     /**
-     * showMangaPageInfinite()
-     *
-     * TODO: Page Inifnite Docs
-     * TODO: Last chapter handler on Controllers and Views
-     * TODO: Chapter with no pages handler on Controllers and Views
+     * Render view for page on infinite mode
      *
      * @param       {String}        $manga_slug       manga's slug
      * @param       {String}        $chapter_slug     manga chapter's slug

@@ -20,15 +20,6 @@ use App\Manga\Source;
 // Components
 use MangaHelper;
 
-/**
- * TODO: Manager Performance Tweak - Figureout a way to start a single object
- *       instance for example from a specific model like \App\Manga\Manga()
- *       and then save chapter and pages from this object instead of initiate
- *       a new object for each chapters and pages.
- *
- *       Docs: https://laravel.com/docs/5.3/eloquent-relationships#the-save-method
- */
-
 class MangaManager implements MangaManagerInterface
 {
     protected $mangaSource = 'mangafox';
@@ -133,7 +124,8 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveManga($data)
     {
-        return Manga::_save($data);
+        $modal = new Manga();
+        return $modal->_save($data);
     }
 
     /**
@@ -143,7 +135,8 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaChapter($data)
     {
-        return Chapter::_save($data);
+        $model = new Chapter();
+        return $model->_save($data);
     }
 
     /**
@@ -153,7 +146,8 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaPage($data)
     {
-        return Page::_save($data);
+        $model = new Page();
+        return $model->_save($data);
     }
 
     /**
@@ -163,7 +157,8 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveSource($slug)
     {
-        return Source::_save($slug);
+        $model = new Source();
+        return $model->_save($slug);
     }
 
     /**
@@ -173,6 +168,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function deleteManga($slug)
     {
-        return Manga::_deleteManga($slug);
+        $model = new Manga();
+        return $model->_deleteManga($slug);
     }
 }

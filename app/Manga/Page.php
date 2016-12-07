@@ -61,7 +61,8 @@ class Page extends Model
 
     public function _imageMeta()
     {
-        $ext = pathinfo($this->manga_page_img_src, PATHINFO_EXTENSION);
+        $src = \App\Components\MangaHelper::uriRemoveParams($this->manga_page_img_src);
+        $ext = pathinfo($src, PATHINFO_EXTENSION);
         $path = public_path("ragnarokz-content/manga/{$this->manga->manga_slug}/{$this->chapter->manga_chapter_slug}/{$this->manga_page_slug}.$ext");
         $getimagesize = getimagesize($path);
         return [
@@ -78,12 +79,17 @@ class Page extends Model
 
     public function _image()
     {
-        return route('manga/page/image', [
+        $src = \App\Components\MangaHelper::uriRemoveParams($this->manga_page_img_src);
+        $ext = pathinfo($src, PATHINFO_EXTENSION);
+        $path = public_path("ragnarokz-content/manga/{$this->manga->manga_slug}/{$this->chapter->manga_chapter_slug}/{$this->manga_page_slug}.$ext");
+        $img_src = route('manga/page/image', [
             'manga_slug' => $this->manga->_slug(),
             'manga_chapter_slug' => $this->chapter->_slug(),
             'manga_page_slug' => $this->_slug(),
             'ext' => pathinfo($this->manga_page_img_src, PATHINFO_EXTENSION),
         ]);
+
+        return file_exists($path) ? $img_src : null;
     }
 
     /**
