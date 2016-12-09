@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $pageTitle or 'Index' }} - RagnarokZ III</title>
     <link href="{{ asset('themes/default/style.css') }}" rel="stylesheet">
+    @stack('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>

@@ -6,6 +6,7 @@ namespace App\Providers\Managers;
 use DiDom\Document;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
 
 // Facedes
 use Illuminate\Support\Facades\Cache;
@@ -108,6 +109,9 @@ class MangaManager implements MangaManagerInterface
                     $source['content'] = $res->getBody()->getContents();
                     Cache::put($source['cacheName'], $source['content'], 60);
                 }
+            } catch (ClientException $e) {
+                $source['status'] = false;
+                $source['error'] = $e;
             } catch (Throwable $t) {
                 $source['status'] = false;
                 $source['error'] = $t;

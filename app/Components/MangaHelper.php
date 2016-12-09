@@ -53,6 +53,12 @@ class MangaHelper
         return $src['scheme'] . '//' . $src['host'] . $src['path'];
     }
 
+    /**
+     * Removes host from URL and only retrive the path
+     *
+     * @param  {String} $src
+     * @return {String}
+     */
     public static function uriGetPath($src)
     {
         $src = parse_url($src);

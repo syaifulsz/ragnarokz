@@ -56,6 +56,7 @@ class ReaderController extends Controller
         if (!$manga) abort(404, 'Page not found.');
 
         $data['manga'] = $manga;
+        $request['manga_slug'] = $manga->_slug();
 
         // set title
         $data['pageTitle'] = $manga->_title();
@@ -85,8 +86,11 @@ class ReaderController extends Controller
             $data['chapters'] = $manga
                 ->chapters()
                 ->orderBy('manga_chapter_order', $request->get('sort'))
+                ->where(function ($query) use ($request) {
+                    if ($request->get('chapter-filter') == 'has-pages') $query->has('pages');
+                })
                 ->paginate(30)
-                ->appends(Input::except('page'));
+                ->appends(Input::except(['page', 'manga_slug']));
         }
 
         View::share($data);

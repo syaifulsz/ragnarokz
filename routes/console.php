@@ -18,12 +18,7 @@ use App\Http\Controllers\ScrapperController;
  * TODO: Console Route Clean Up
  * TODO: Move Command for "manga:add" into a command controller
  * TODO: Create Command for "manga:delete" - to delete manga and all its relationships
- * TODO: Create Command for "manga:update" - to update manga chapters
  */
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->describe('Display an inspiring quote');
 
 // php artisan manga:add {manga_url}
 Artisan::command('manga:add {manga_url}', function ($manga_url) {
