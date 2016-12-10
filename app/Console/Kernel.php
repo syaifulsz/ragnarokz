@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\Manga\Manga::class,
+        Commands\Manga\MangaDelete::class,
         Commands\Manga\Chapter::class
     ];
 
