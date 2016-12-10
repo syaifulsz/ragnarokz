@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "imangazaliev/didom": "^1.8",
         "cocur/slugify": "^2.3",
-        "stojg/crop": "^1.2"
+        "stojg/crop": "^1.2",
+        "rap2hpoutre/laravel-log-viewer": "^0.7.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

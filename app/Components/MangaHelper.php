@@ -28,10 +28,40 @@ class MangaHelper
      */
     public static function deleteDir($dir)
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? self::deleteDir("$dir/$file") : unlink("$dir/$file");
+        $output = false;
+        if (file_exists($dir)) {
+            $files = array_diff(scandir($dir), ['.', '..']);
+            foreach ($files as $file) {
+                (is_dir("$dir/$file")) ? self::deleteDir("$dir/$file") : unlink("$dir/$file");
+            }
+
+            $output = rmdir($dir);
         }
-        return rmdir($dir);
+
+        return $output;
+    }
+
+    /**
+     * Removes params on URL
+     *
+     * @param  {String} $src
+     * @return {String}
+     */
+    public static function uriRemoveParams($src)
+    {
+        $src = parse_url($src);
+        return $src['scheme'] . '//' . $src['host'] . $src['path'];
+    }
+
+    /**
+     * Removes host from URL and only retrive the path
+     *
+     * @param  {String} $src
+     * @return {String}
+     */
+    public static function uriGetPath($src)
+    {
+        $src = parse_url($src);
+        return $src['path'];
     }
 }

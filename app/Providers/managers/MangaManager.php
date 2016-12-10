@@ -6,16 +6,17 @@ namespace App\Providers\Managers;
 use DiDom\Document;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
 
 // Facedes
 use Illuminate\Support\Facades\Cache;
 
 // Models
-use App\Manga;
-use App\MangaChapter;
-use App\MangaPage;
+use App\Manga\Manga;
+use App\Manga\Chapter;
+use App\Manga\Page;
 use App\MangaPhoto;
-use App\Source;
+use App\Manga\Source;
 
 // Components
 use MangaHelper;
@@ -108,6 +109,9 @@ class MangaManager implements MangaManagerInterface
                     $source['content'] = $res->getBody()->getContents();
                     Cache::put($source['cacheName'], $source['content'], 60);
                 }
+            } catch (ClientException $e) {
+                $source['status'] = false;
+                $source['error'] = $e;
             } catch (Throwable $t) {
                 $source['status'] = false;
                 $source['error'] = $t;
@@ -124,8 +128,8 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveManga($data)
     {
-        $model = new Manga();
-        return $model->_save($data);
+        $modal = new Manga();
+        return $modal->_save($data);
     }
 
     /**
@@ -135,7 +139,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaChapter($data)
     {
-        $model = new MangaChapter();
+        $model = new Chapter();
         return $model->_save($data);
     }
 
@@ -146,7 +150,7 @@ class MangaManager implements MangaManagerInterface
      */
     public function saveMangaPage($data)
     {
-        $model = new MangaPage();
+        $model = new Page();
         return $model->_save($data);
     }
 

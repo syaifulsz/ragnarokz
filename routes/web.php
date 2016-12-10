@@ -12,6 +12,7 @@
 */
 
 Route::get('report', ['as' => 'forms/report', 'uses' => 'SiteController@formsReport']);
+Route::get('logs', ['as' => 'logger', 'uses' => 'LoggerController@index'])->middleware('auth');
 
 // Auth routes
 include(base_path('routes/auth/auth.php'));
