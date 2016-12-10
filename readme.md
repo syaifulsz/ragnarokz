@@ -61,14 +61,4 @@ php artisan manga:scrap
 
 Please create an issue and insert what feature you want or interested in the future!
 
-* Inf8 Mode - Automatically switch to next chapter when reach the bottom of the page (Beta Testing)
 * Manage manga via web (GUIFTW!)
-
-## TODOs
-
-- Console Route Clean Up __TODO__ [routes/console.php](routes/console.php)
-- Create an option and function to scrap chapters that has no pages __TODO__ [app/Console/Commands/MangaCommand.php](app/Console/Commands/MangaCommand.php)
-- Create Command for "manga:delete" - to delete manga and all its relationships __TODO__ [routes/console.php](routes/console.php)
-- Create Command for "manga:update" - to update manga chapters __TODO__ [routes/console.php](routes/console.php)
-- MangaCommand Clean Up __TODO__ [app/Console/Commands/MangaCommand.php](app/Console/Commands/MangaCommand.php)
-- Move Command for "manga:add" into a command controller __TODO__ [routes/console.php](routes/console.php)
