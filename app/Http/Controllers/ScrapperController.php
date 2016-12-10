@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
 
 // Models
-use App\Manga;
-use App\MangaChapter;
-use App\MangaPage;
+use App\Manga\Manga;
+use App\Manga\Chapter;
+use App\Manga\Page;
 use App\MangaPhoto;
-use App\Source;
+use App\Manga\Source;
 
 class ScrapperController extends Controller
 {
@@ -70,7 +70,7 @@ class ScrapperController extends Controller
      */
     public function mangaPages($manga_slug, $chapter_slug)
     {
-        $chapter = MangaChapter::slug("{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Chapter not found.');
 

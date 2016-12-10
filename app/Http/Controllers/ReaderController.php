@@ -6,9 +6,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Cache;
 
 // Vendors
 use Carbon\Carbon;
+
+// Mangas
+use \App\Manga\Manga;
+use \App\Manga\Chapter;
+use \App\Manga\Page;
+use \App\Manga\ChapterRecent;
 
 class ReaderController extends Controller
 {
@@ -22,7 +29,7 @@ class ReaderController extends Controller
             'pageTitle' => 'Manga Index',
             'mangas' => []
         ];
-        $data['mangas'] = \App\Manga::all();
+        $data['mangas'] = Manga::all();
 
         View::share($data);
         return view('manga.index');
@@ -45,12 +52,12 @@ class ReaderController extends Controller
         ];
 
         // set manga
-        $query = new \App\Manga();
-        $manga = $query->slug($manga_slug)->first();
+        $manga = Manga::slug($manga_slug)->first();
 
         if (!$manga) abort(404, 'Page not found.');
 
         $data['manga'] = $manga;
+        $request['manga_slug'] = $manga->_slug();
 
         // set title
         $data['pageTitle'] = $manga->_title();
@@ -63,11 +70,12 @@ class ReaderController extends Controller
         if ($manga->recents()) {
 
             // set recent read chapters
-            $getRecents = $manga->recents()->orderBy('created_at', 'desc')->paginate(6);
+            $getRecents = $manga->recents()->orderBy('created_at', 'desc')->limit(6)->get();
             $recentFirst = $getRecents->first();
             if ($recentFirst) {
                 $data['recents']['first'] = $recentFirst->_recent();
             }
+
             $getRecents->shift();
             foreach ($getRecents as $recent) {
                 $data['recents']['recents'][] = $recent->_recent();
@@ -75,14 +83,19 @@ class ReaderController extends Controller
 
             // set chapter cover
             $data['chapterCover'] = $recentFirst ? $recentFirst->chapter->_cover() : null;
+        }
 
-            // set chapters
-            $data['chapters'] = $manga
+        // set chapters
+        $data['chapters'] = Cache::remember(str_slug($request->fullUrl(), '-'), 60, function () use ($manga, $request) {
+            return $manga
                 ->chapters()
                 ->orderBy('manga_chapter_order', $request->get('sort'))
+                ->where(function ($query) use ($request) {
+                    if ($request->get('chapter-filter') == 'has-pages') $query->has('pages');
+                })
                 ->paginate(30)
-                ->appends(Input::except('page'));
-        }
+                ->appends(Input::except(['page', 'manga_slug']));
+        });
 
         View::share($data);
         return view('manga.chapters');
@@ -106,24 +119,24 @@ class ReaderController extends Controller
         ];
 
         // set chapters
-        $query = new \App\MangaChapter();
-        $chapter = $query->slug("{$manga_slug}-{$chapter_slug}")->first();
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
 
         if (!$chapter) abort(404, 'Page not found.');
 
         $data['chapter'] = $chapter ? $chapter : [];
-        $data['manga'] = $chapter ? $chapter->manga : [];
+
         $data['pages'] = $chapter ? $chapter->pages : [];
 
         // init manga
-        $manga = new \App\Manga();
-        $manga = $manga->slug($manga_slug)->first();
+        $manga = $chapter ? $chapter->manga : [];
+        // $manga = new \App\Manga\Manga();
+        // $manga = $manga->slug($manga_slug)->first();
 
         // set manga
         $data['manga'] = $manga;
 
         // set recent read chapters
-        $recent = new \App\MangaChapterRecent();
+        $recent = new ChapterRecent();
         $latestRecent = $recent
             ->where('manga_id', $manga->manga_id)
             ->where('created_at', '>', Carbon::now()->subHour(1))
@@ -212,5 +225,67 @@ class ReaderController extends Controller
 
         View::share($data);
         return view('manga.page');
+    }
+
+    /**
+     * Render view for page on infinite mode
+     *
+     * @param       {String}        $manga_slug       manga's slug
+     * @param       {String}        $chapter_slug     manga chapter's slug
+     * @param       View::make()
+     */
+    public function showMangaPageInfinite($manga_slug, $chapter_slug)
+    {
+        $data = [
+            'manga' => [],
+            'chapter' => [],
+            'pages' => []
+        ];
+
+        // set chapters
+        $chapter = Chapter::slug("{$manga_slug}-{$chapter_slug}")->first();
+
+        if (!$chapter) abort(404, 'Page not found.');
+
+        $data['chapter'] = $chapter ? $chapter : [];
+        $data['pages'] = $chapter ? $chapter->pages : [];
+
+        // init manga
+        $manga = $chapter ? $chapter->manga : [];
+        // $manga = new \App\Manga\Manga();
+        // $manga = $manga->slug($manga_slug)->first();
+
+        // set breadcrumb
+        $this->breadcrumb[$chapter->manga->manga_title] = $chapter->manga->_url();
+        $this->breadcrumb[$chapter->_title()] = $chapter->_url();
+        $data['breadcrumb'] = $this->breadcrumb;
+
+        // set manga
+        $data['manga'] = $manga;
+
+        // query chapter for pagination
+        $navQuery = $manga->chapters
+            ->where('manga_chapter_order', '>=', ((int)$chapter->manga_chapter_order - 1))
+            ->where('manga_chapter_order', '<=', ((int)$chapter->manga_chapter_order + 1))
+            ->sortBy('manga_chapter_order');
+
+        // create pagination
+        $pagination = [];
+        $navs = [];
+        foreach ($navQuery as $nav) {
+            $navs[] = $nav;
+        }
+
+        foreach ($navs as $nav_key => $nav) {
+            if ($nav->manga_chapter_order == $chapter->manga_chapter_order) $current_nav_key = $nav_key;
+        }
+
+        // set pagination
+        $pagination['next'] = isset($navs[$current_nav_key + 1]) ? $navs[$current_nav_key + 1] : null;
+        $pagination['prev'] = $current_nav_key - 1 >= 0 ? $navs[$current_nav_key - 1] : null;
+        $data['pagination'] = $pagination;
+
+        View::share($data);
+        return view('manga.page_infinite');
     }
 }

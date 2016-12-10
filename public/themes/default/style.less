@@ -88,6 +88,14 @@
  */
 @import "@{assets_path}/less/bootstrap-patch-navbar.less";
 
+/**
+ * SpinKit
+ */
+@import "@{plugin_path}/SpinKit/css/spinners/11-folding-cube.less";
+.sk-folding-cube .sk-cube:before {
+    background-color: #FFF;
+}
+
 .font-size--12          { font-size: 12px; }
 .font-size--14          { font-size: 14px; }
 .line-height--normal    { line-height: normal; }
@@ -257,9 +265,6 @@
 
 .rz-pager__thumb {
     ._grayscale();
-    // width: 100%;
-    // width: 100px;
-    // height: 100px;
 }
 
 ._grayscale(@filter: ~"grayscale(1)") {
@@ -284,4 +289,35 @@
     -o-filter: @filter;
     -ms-filter: @filter;
     filter: @filter;
+}
+
+.inf8-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.inf8-btn {
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    background-color: rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    font-weight: bold;
+
+    &:hover, &:focus {
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        text-decoration: none;
+        color: #000;
+    }
+
+    &.inf8-btn--active {
+        background-color: @brand-danger;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        text-decoration: none;
+        color: #FFF;
+    }
 }

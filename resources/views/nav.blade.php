@@ -28,6 +28,12 @@
                                     <div class="text-muted"><small>Improvements, bugs and issues</small></div>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('logger') }}">
+                                    Logger
+                                    <div class="text-muted"><small>Records of errors when scrapping</small></div>
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ route('auth/logout/handle', ['redirect' => Request::url()]) }}">Logout</a></li>
                         </ul>

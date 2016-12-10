@@ -4,6 +4,7 @@
     @include('manga._page_header', ['title' => $chapter->_title(), 'cover' => $chapterCover, 'recents' => $recents, 'pagesCount' => $pages->count(), 'chapterOrder' => $chapter->_order()])
     @include('manga._page_loop', ['pages' => $pages, 'pagination' => $pagination, 'infinite' => true]);
     @include('manga._page_pager', ['pagination' => $pagination])
+    @include('manga._page_inf8_toggle', ['chapter' => $chapter]);
 
     <div class="container">
         <div class="alert alert-danger xs-mt-15">
