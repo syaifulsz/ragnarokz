@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Cache;
 
 // Vendors
 use Carbon\Carbon;
@@ -69,11 +70,12 @@ class ReaderController extends Controller
         if ($manga->recents()) {
 
             // set recent read chapters
-            $getRecents = $manga->recents()->orderBy('created_at', 'desc')->paginate(6);
+            $getRecents = $manga->recents()->orderBy('created_at', 'desc')->limit(6)->get();
             $recentFirst = $getRecents->first();
             if ($recentFirst) {
                 $data['recents']['first'] = $recentFirst->_recent();
             }
+
             $getRecents->shift();
             foreach ($getRecents as $recent) {
                 $data['recents']['recents'][] = $recent->_recent();
@@ -81,9 +83,11 @@ class ReaderController extends Controller
 
             // set chapter cover
             $data['chapterCover'] = $recentFirst ? $recentFirst->chapter->_cover() : null;
+        }
 
-            // set chapters
-            $data['chapters'] = $manga
+        // set chapters
+        $data['chapters'] = Cache::remember(str_slug($request->fullUrl(), '-'), 60, function () use ($manga, $request) {
+            return $manga
                 ->chapters()
                 ->orderBy('manga_chapter_order', $request->get('sort'))
                 ->where(function ($query) use ($request) {
@@ -91,7 +95,7 @@ class ReaderController extends Controller
                 })
                 ->paginate(30)
                 ->appends(Input::except(['page', 'manga_slug']));
-        }
+        });
 
         View::share($data);
         return view('manga.chapters');

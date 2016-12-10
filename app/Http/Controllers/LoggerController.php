@@ -33,9 +33,9 @@ class LoggerController extends \Rap2hpoutre\LaravelLogViewer\LogViewerController
         $controller->breadcrumb["Logger"] = route('logger');
         $data['breadcrumb'] = $controller->breadcrumb;
 
-        $data['logs'] = $parentController->logs;
-        $data['files'] = $parentController->files;
-        $data['current_file'] = $parentController->current_file;
+        $data['logs'] = isset($parentController->logs) ? $parentController->logs : [];
+        $data['files'] = isset($parentController->files) ? $parentController->files : [];
+        $data['current_file'] = isset($parentController->current_file) ? $parentController->current_file : [];
 
         View::share($data);
         return view('logger.logger');

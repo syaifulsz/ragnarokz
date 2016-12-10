@@ -4,35 +4,42 @@
 
 @section('content')
     <div class="container">
-        <div class="well table-container">
-            @if ($logs === null)
-            <div>Log file >50M, please download it.</div>
-            @else
-                <table id="table-log" class="table table-striped">
-                    <thead><tr><th>Level</th><th>Date</th><th>Content</th></tr></thead>
-                    <tbody>
-                        @foreach($logs as $key => $log)
-                            <tr>
-                                <td class="text-{{{$log['level_class']}}}">{{$log['level']}}</td>
-                                <td class="date">
-                                    <span data-toggle="tooltip" data-placement="top" title="{{ $carbon->parse($log['date'])->toRssString() }}">{{ $carbon->parse($log['date'])->diffForHumans() }}</span>
-                                </td>
-                                <td class="text">
-                                    @if ($log['stack']) <a class="pull-right expand btn btn-default btn-xs" data-display="stack{{{$key}}}"><span class="glyphicon glyphicon-search"></span></a>@endif
-                                    {{{$log['text']}}}
-                                    @if (isset($log['in_file'])) <br />{{{$log['in_file']}}}@endif
-                                    @if ($log['stack']) <div class="stack" id="stack{{{$key}}}" style="display: none; white-space: pre-wrap;">{{{ trim($log['stack']) }}}</div>@endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-        </div>
-        <div>
-            <a class="btn btn-default" href="?dl={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-download-alt"></span> Download file</a>
-            <a class="btn btn-default" id="delete-log" href="?del={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-trash"></span> Delete file</a>
-        </div>
+        @if (@$logs)
+            <div class="well table-container">
+                @if ($logs === null)
+                <div>Log file >50M, please download it.</div>
+                @else
+                    <table id="table-log" class="table table-striped">
+                        <thead><tr><th>Logs</th></tr></thead>
+                        <tbody>
+                            @foreach($logs as $key => $log)
+                                <tr>
+                                    <td class="text js-stack-container" data-stack="#stack{{{$key}}}" data-sort="{{ $log['date'] }}" style="cursor: pointer;">
+                                        <small class="text-muted" data-toggle="tooltip" data-placement="top" title="{{ $carbon->parse($log['date'])->toRssString() }}">{{ $carbon->parse($log['date'])->diffForHumans() }}</small><br />
+                                        <div class="" style="font-size: 11px;">
+                                            <strong>{{{$log['text']}}}</strong>
+                                            <strong>@if (isset($log['in_file'])) <br />{{{$log['in_file']}}}@endif</strong>
+                                            @if ($log['stack']) <div class="stack" id="stack{{{$key}}}" style="display: none; white-space: pre-wrap;">{{{ trim($log['stack']) }}}</div>@endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+            <div>
+                @if (@$current_file)
+                    <a class="btn btn-default" href="?dl={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-download-alt"></span> Download file</a>
+                    <a class="btn btn-default" id="delete-log" href="?del={{ base64_encode($current_file) }}"><span class="glyphicon glyphicon-trash"></span> Delete file</a>
+                @endif
+            </div>
+        @else
+            <div class="alert alert-success">
+                <h4>Good job!</h4>
+                <p>You have no error reported!</p>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -49,7 +56,7 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
         $('#table-log').DataTable({
-            "order": [ 1, 'desc' ],
+            "order": [ 0, 'desc' ],
             "stateSave": true,
             "stateSaveCallback": function (settings, data) {
                 window.localStorage.setItem("datatable", JSON.stringify(data));
@@ -60,10 +67,10 @@
                 return data;
             }
         });
-        $('.table-container').on('click', '.expand', function(){
-            $('#' + $(this).data('display')).toggle();
+        $(document).on('click', '.js-stack-container', function() {
+            $($(this).data('stack')).toggle();
         });
-        $('#delete-log').click(function(){
+        $('#delete-log').click(function() {
             return confirm('Are you sure?');
         });
     });
